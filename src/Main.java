@@ -1,13 +1,10 @@
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Scanner;
-import java.util.Set;
+import java.util.*;
 
 public class Main {
     private Scanner scanner = new Scanner(System.in);
     //Fixa inlogg med useraccount sen. skapa nya konton osv.
     private UserAccount currentUser;
-    private Set accounts = new HashSet();
+    private Map accounts = new HashMap();
     public static void main(String[] args) {
         Main main = new Main();
         main.setup();
@@ -20,7 +17,7 @@ public class Main {
     }
 
     private void run() {
-        logIn();
+        logInSetup();
         boolean running = true;
         System.out.println("Welcome to JBB. Julle-Bulle-Bank at your service!");
         while(running) {
@@ -56,7 +53,7 @@ public class Main {
     private void exit() {
     }
 
-    private void logIn() {
+    private void logInSetup() {
         printLogInMenu();
         try {
             int answer = scanner.nextInt();
@@ -66,7 +63,7 @@ public class Main {
                     createNewBankUser();
                     break;
                 case 2:
-                    findUser()
+                    logIn();
                     break;
                 case 3:
                     //Exit program
@@ -80,6 +77,18 @@ public class Main {
         }
     }
 
+    private void logIn() {
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+        System.out.print("\nPassword: ");
+
+        if(accounts.containsKey(username) && ) {
+
+        }
+        else
+            System.out.println("Login failed");
+    }
+
     private void createNewBankUser() {
         System.out.println("What is your first name?");
         String firstName = scanner.nextLine();
@@ -89,6 +98,9 @@ public class Main {
         String username = scanner.nextLine();
         System.out.println("What password do you want?");
         String password = scanner.nextLine();
+
+        UserAccount newUserAccount = new UserAccount(firstName, surname, username, password);
+        accounts.put(username, newUserAccount);
     }
 
     private void printLogInMenu() {
