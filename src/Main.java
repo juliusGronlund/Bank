@@ -12,14 +12,12 @@ public class Main {
     }
 
     private void setup() {
-        System.out.println("SETUP");
         //Ladda in filer och starta upp.
     }
 
     private void run() {
         boolean running = true;
-        System.out.println("RUN");
-        System.out.println("Welcome to JB. Julle-Bank at your service");
+        System.out.println("Welcome to JBB. Julle-Bulle-Bank at your service!");
         while(running) {
             printMenu();
             int input;
@@ -50,7 +48,6 @@ public class Main {
     }
 
     private void exit() {
-        System.out.println("EXIT");
     }
 
     private void printMenu() {
@@ -68,10 +65,14 @@ public class Main {
         System.out.println("Choose by writing account-ID");
         try {
             answer = scanner.nextInt();
-            //OBS Kontrollera answer
-            System.out.println("How much do you want to deposit?");
-            amount = scanner.nextInt();
-            userAccount.deposit(amount, answer);
+            if(userAccount.hasId(answer)) {
+                System.out.println("How much do you want to deposit?");
+                amount = scanner.nextInt();
+                userAccount.deposit(amount, answer);
+            }
+            else
+                System.out.println("ID does not exist here.");
+
         }
         catch(Exception e) {
             System.out.println("Error. incorrect input.");
@@ -85,13 +86,17 @@ public class Main {
         System.out.println("Choose by writing account-ID");
         try {
             answer = scanner.nextInt();
-            //OBS Kontrollera answer
-            System.out.println("How much do you want to withdraw?");
-            amount = scanner.nextInt();
-            if(amount > userAccount.getBankAccount(answer).getSalary())
-                System.out.println("Requested withdrawal exceeds current account-salary");
+            if(userAccount.hasId(answer)) {
+                System.out.println("How much do you want to withdraw?");
+                amount = scanner.nextInt();
+                if(amount > userAccount.getBankAccount(answer).getSalary())
+                    System.out.println("Requested withdrawal exceeds current account-salary");
+                else
+                    userAccount.withdraw(amount, answer);
+            }
             else
-                userAccount.withdraw(amount, answer);
+                System.out.println("ID does not exist here.");
+
         }
         catch(Exception e) {
             System.out.println("Withdraw ERROR");

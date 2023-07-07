@@ -26,6 +26,13 @@ public class UserAccount {
             return null;
     }
 
+    public boolean hasId(int id) {
+        if(bankAccounts.containsKey(id))
+            return true;
+
+        return false;
+    }
+
     public void deposit(int amount, int bankAccountId) {
         try {
             BankAccount bankAccount = bankAccounts.get(bankAccountId);

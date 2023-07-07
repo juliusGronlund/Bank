@@ -25,7 +25,6 @@ public class BankAccount {
 
     private int setBankAccountId() {
         idCounter++;
-        System.out.println("idCounter: " + idCounter);
         return idCounter;
     }
 
