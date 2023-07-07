@@ -20,9 +20,39 @@ public class UserAccount {
     }
 
     public BankAccount getBankAccount(int id) {
-        if(bankAccounts.containsValue(id))
+        if(bankAccounts.containsKey(id))
             return bankAccounts.get(id);
         else
             return null;
+    }
+
+    public void deposit(int amount, int bankAccountId) {
+        try {
+            BankAccount bankAccount = bankAccounts.get(bankAccountId);
+            bankAccount.deposit(amount);
+        }
+        catch(Exception e) {
+            System.out.println("Deposit error");
+        }
+    }
+
+    public int withdraw(int amount, int bankAccountId) {
+        try {
+            BankAccount bankAccount = bankAccounts.get(bankAccountId);
+            bankAccount.withdraw(amount);
+        }
+        catch(Exception e) {
+            System.out.println("withdraw error");
+        }
+        return 0;
+    }
+
+    @Override
+    public String toString() {
+        return "UserAccount{" +
+                "bankAccounts=" + bankAccounts +
+                ", firstName='" + firstName + '\'' +
+                ", surName='" + surName + '\'' +
+                '}';
     }
 }
