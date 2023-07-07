@@ -4,7 +4,10 @@ public class Main {
     private Scanner scanner = new Scanner(System.in);
     //Fixa inlogg med useraccount sen. skapa nya konton osv.
     private UserAccount currentUser;
-    private Map accounts = new HashMap();
+    private Map<String, UserAccount> accounts = new HashMap();
+
+    private boolean runningLogin = true;
+    private boolean runningBank = true;
     public static void main(String[] args) {
         Main main = new Main();
         main.setup();
@@ -18,13 +21,14 @@ public class Main {
 
     private void run() {
         logInSetup();
-        boolean running = true;
+        runningBank = true;
         System.out.println("Welcome to JBB. Julle-Bulle-Bank at your service!");
-        while(running) {
+        while(runningBank) {
             printMenu();
             int input;
             try {
                 input = scanner.nextInt();
+                scanner.nextLine();
                 switch(input) {
                     case 1:
                         //Metoder för kommandon
@@ -38,7 +42,9 @@ public class Main {
                         break;
                     case 4:
                         //Logout istället för att exit programme
-                        running = false;
+                        runningBank = false;
+                        runningLogin = true;
+                        logInSetup();
                         break;
                     default:
                         System.out.println("Choose something from the list");
@@ -54,36 +60,46 @@ public class Main {
     }
 
     private void logInSetup() {
-        printLogInMenu();
-        try {
-            int answer = scanner.nextInt();
+        while(runningLogin) {
+            printLogInMenu();
+            try {
+                int answer = scanner.nextInt();
+                scanner.nextLine();
 
-            switch (answer) {
-                case 1:
-                    createNewBankUser();
-                    break;
-                case 2:
-                    logIn();
-                    break;
-                case 3:
-                    //Exit program
-                    break;
-                default:
-                    System.out.println("Incorrect");
+                switch (answer) {
+                    case 1:
+                        createNewBankUser();
+                        break;
+                    case 2:
+                        logIn();
+                        break;
+                    case 3:
+                        //Exit program
+                        runningLogin = false;
+                        runningBank = false;
+                        break;
+                    default:
+                        System.out.println("Incorrect");
+                }
+            }
+            catch (Exception e) {
+                System.out.println("Log in ERROR");
             }
         }
-        catch (Exception e) {
-            System.out.println("Log in ERROR");
-        }
+
     }
 
     private void logIn() {
         System.out.print("Username: ");
         String username = scanner.nextLine();
         System.out.print("\nPassword: ");
+        String password = scanner.nextLine();
 
-        if(accounts.containsKey(username) && ) {
-
+        if(accounts.containsKey(username) && accounts.get(username).passwordMatches(password)) {
+            currentUser = accounts.get(username);
+            System.out.println("Login success");
+            runningLogin = false;
+            runningBank = true;
         }
         else
             System.out.println("Login failed");
@@ -125,9 +141,11 @@ public class Main {
         System.out.println("Choose by writing account-ID");
         try { //Det är strul med inputs och grejer där det kan bli infinty-loop.
             answer = scanner.nextInt();
+            scanner.nextLine();
             if(currentUser.hasId(answer)) {
                 System.out.println("How much do you want to deposit?");
                 amount = scanner.nextInt();
+                scanner.nextLine();
                 currentUser.deposit(amount, answer);
             }
             else
@@ -146,9 +164,11 @@ public class Main {
         System.out.println("Choose by writing account-ID");
         try {
             answer = scanner.nextInt();
+            scanner.nextLine();
             if(currentUser.hasId(answer)) {
                 System.out.println("How much do you want to withdraw?");
                 amount = scanner.nextInt();
+                scanner.nextLine();
                 if(amount > currentUser.getBankAccount(answer).getSalary())
                     System.out.println("Requested withdrawal exceeds current account-salary");
                 else
@@ -164,7 +184,6 @@ public class Main {
     }
 
     private void createNewBankAccount() {
-        scanner.nextLine();
         //Fråga vilket namn det nya bankkonto ska ha
         System.out.println("I'm delighted that you're interested in setting up a new bank account. What name would you like to give to your account?");
         String answer = scanner.nextLine(); //Den tar inte upp namnet.

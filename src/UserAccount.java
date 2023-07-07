@@ -61,6 +61,10 @@ public class UserAccount {
         bankAccounts.forEach((bankId, bankAccount) -> System.out.println("Name:" + bankAccount.getName() + ", ID:" + bankId + ", Salary:" + bankAccount.getSalary()));
     }
 
+    public boolean passwordMatches(String inputPassword) {
+       return password.matches(inputPassword);
+    }
+
     @Override
     public String toString() {
         return "UserAccount{" +
