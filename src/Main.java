@@ -1,9 +1,13 @@
+import java.util.HashSet;
+import java.util.Random;
 import java.util.Scanner;
+import java.util.Set;
 
 public class Main {
     private Scanner scanner = new Scanner(System.in);
     //Fixa inlogg med useraccount sen. skapa nya konton osv.
-    private UserAccount userAccount = new UserAccount("Julius", "Grönlund");
+    private UserAccount currentUser;
+    private Set accounts = new HashSet();
     public static void main(String[] args) {
         Main main = new Main();
         main.setup();
@@ -16,6 +20,7 @@ public class Main {
     }
 
     private void run() {
+        logIn();
         boolean running = true;
         System.out.println("Welcome to JBB. Julle-Bulle-Bank at your service!");
         while(running) {
@@ -35,6 +40,7 @@ public class Main {
                         createNewBankAccount();
                         break;
                     case 4:
+                        //Logout istället för att exit programme
                         running = false;
                         break;
                     default:
@@ -50,6 +56,48 @@ public class Main {
     private void exit() {
     }
 
+    private void logIn() {
+        printLogInMenu();
+        try {
+            int answer = scanner.nextInt();
+
+            switch (answer) {
+                case 1:
+                    createNewBankUser();
+                    break;
+                case 2:
+                    findUser()
+                    break;
+                case 3:
+                    //Exit program
+                    break;
+                default:
+                    System.out.println("Incorrect");
+            }
+        }
+        catch (Exception e) {
+            System.out.println("Log in ERROR");
+        }
+    }
+
+    private void createNewBankUser() {
+        System.out.println("What is your first name?");
+        String firstName = scanner.nextLine();
+        System.out.println("What is your surname?");
+        String surname = scanner.nextLine();
+        System.out.println("What username do you want?");
+        String username = scanner.nextLine();
+        System.out.println("What password do you want?");
+        String password = scanner.nextLine();
+    }
+
+    private void printLogInMenu() {
+        System.out.println("LOG IN! LOG IN!");
+        System.out.println("1. Create bank user");
+        System.out.println("2. Log in");
+        System.out.println("3. Leave the bank");
+    }
+
     private void printMenu() {
         System.out.println("1. Deposit");
         System.out.println("2. Withdraw");
@@ -61,14 +109,14 @@ public class Main {
     private void deposit() {
         int answer, amount;
         System.out.println("To which account do you want to deposit?");
-        userAccount.printBankAccountsInfo();
+        currentUser.printBankAccountsInfo();
         System.out.println("Choose by writing account-ID");
-        try {
+        try { //Det är strul med inputs och grejer där det kan bli infinty-loop.
             answer = scanner.nextInt();
-            if(userAccount.hasId(answer)) {
+            if(currentUser.hasId(answer)) {
                 System.out.println("How much do you want to deposit?");
                 amount = scanner.nextInt();
-                userAccount.deposit(amount, answer);
+                currentUser.deposit(amount, answer);
             }
             else
                 System.out.println("ID does not exist here.");
@@ -82,17 +130,17 @@ public class Main {
     private void withdraw() {
         int answer, amount;
         System.out.println("From which account do you want to withdraw?");
-        userAccount.printBankAccountsInfo();
+        currentUser.printBankAccountsInfo();
         System.out.println("Choose by writing account-ID");
         try {
             answer = scanner.nextInt();
-            if(userAccount.hasId(answer)) {
+            if(currentUser.hasId(answer)) {
                 System.out.println("How much do you want to withdraw?");
                 amount = scanner.nextInt();
-                if(amount > userAccount.getBankAccount(answer).getSalary())
+                if(amount > currentUser.getBankAccount(answer).getSalary())
                     System.out.println("Requested withdrawal exceeds current account-salary");
                 else
-                    userAccount.withdraw(amount, answer);
+                    currentUser.withdraw(amount, answer);
             }
             else
                 System.out.println("ID does not exist here.");
@@ -108,7 +156,7 @@ public class Main {
         //Fråga vilket namn det nya bankkonto ska ha
         System.out.println("I'm delighted that you're interested in setting up a new bank account. What name would you like to give to your account?");
         String answer = scanner.nextLine(); //Den tar inte upp namnet.
-        userAccount.createBankAccount(answer);
+        currentUser.createBankAccount(answer);
         System.out.println("The account " + answer + " has been created.");
     }
 }

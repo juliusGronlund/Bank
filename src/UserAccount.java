@@ -4,11 +4,14 @@ import java.util.Map;
 public class UserAccount {
     //En samling av BankAccounts. Börjar med ett. Användaren kan sen skapa fler.
     private Map<Integer,BankAccount> bankAccounts;
-    private String firstName, surName;
+    private String firstName, surName, accountName;
+    private Password password;
 
-    public UserAccount(String firstName, String surName) {
+    public UserAccount(String firstName, String surName, String accountName, String passwordInput) {
         this.firstName = firstName;
         this.surName = surName;
+        this.accountName = accountName;
+        password = new Password(passwordInput);
         bankAccounts = new HashMap();
         BankAccount firstBankAccount = new BankAccount("Main");
         bankAccounts.put(firstBankAccount.getId(), firstBankAccount);
