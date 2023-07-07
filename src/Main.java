@@ -2,6 +2,7 @@ import java.util.Scanner;
 
 public class Main {
     private Scanner scanner = new Scanner(System.in);
+    //Fixa inlogg med useraccount sen. skapa nya konton osv.
     private UserAccount userAccount = new UserAccount("Julius", "Grönlund");
     public static void main(String[] args) {
         Main main = new Main();
@@ -59,14 +60,50 @@ public class Main {
         System.out.println("4. Exit");
     }
 
+    //Ta in info om deposit och anropa metod
     private void deposit() {
-        System.out.println("From what account do you want to deposit?");
+        int answer, amount;
+        System.out.println("To which account do you want to deposit?");
         userAccount.printBankAccountsInfo();
+        System.out.println("Choose by writing account-ID");
+        try {
+            answer = scanner.nextInt();
+            //OBS Kontrollera answer
+            System.out.println("How much do you want to deposit?");
+            amount = scanner.nextInt();
+            userAccount.deposit(amount, answer);
+        }
+        catch(Exception e) {
+            System.out.println("Error. incorrect input.");
+        }
     }
 
     private void withdraw() {
+        int answer, amount;
+        System.out.println("From which account do you want to withdraw?");
+        userAccount.printBankAccountsInfo();
+        System.out.println("Choose by writing account-ID");
+        try {
+            answer = scanner.nextInt();
+            //OBS Kontrollera answer
+            System.out.println("How much do you want to withdraw?");
+            amount = scanner.nextInt();
+            if(amount > userAccount.getBankAccount(answer).getSalary())
+                System.out.println("Requested withdrawal exceeds current account-salary");
+            else
+                userAccount.withdraw(amount, answer);
+        }
+        catch(Exception e) {
+            System.out.println("Withdraw ERROR");
+        }
     }
 
     private void createNewBankAccount() {
+        scanner.nextLine();
+        //Fråga vilket namn det nya bankkonto ska ha
+        System.out.println("I'm delighted that you're interested in setting up a new bank account. What name would you like to give to your account?");
+        String answer = scanner.nextLine(); //Den tar inte upp namnet.
+        userAccount.createBankAccount(answer);
+        System.out.println("The account " + answer + " has been created.");
     }
 }

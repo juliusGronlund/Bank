@@ -2,6 +2,7 @@ public class BankAccount {
 
     private static int idCounter = 0;
     private int id;
+    private String name;
     private int salary;
 
     public int getId() {
@@ -12,9 +13,14 @@ public class BankAccount {
         return salary;
     }
 
-    public BankAccount() {
+    public String getName() {
+        return name;
+    }
+
+    public BankAccount(String name) {
         salary = 0;
         id = setBankAccountId();
+        this.name = name;
     }
 
     private int setBankAccountId() {

@@ -10,12 +10,12 @@ public class UserAccount {
         this.firstName = firstName;
         this.surName = surName;
         bankAccounts = new HashMap();
-        BankAccount firstBankAccount = new BankAccount();
+        BankAccount firstBankAccount = new BankAccount("Main");
         bankAccounts.put(firstBankAccount.getId(), firstBankAccount);
     }
 
-    public void createBankAccount() {
-        BankAccount bankAccount = new BankAccount();
+    public void createBankAccount(String name) {
+        BankAccount bankAccount = new BankAccount(name);
         bankAccounts.put(bankAccount.getId(), bankAccount);
     }
 
@@ -45,6 +45,10 @@ public class UserAccount {
             System.out.println("withdraw error");
         }
         return 0;
+    }
+
+    public void printBankAccountsInfo() {
+        bankAccounts.forEach((bankId, bankAccount) -> System.out.println("Name:" + bankAccount.getName() + ", ID:" + bankId + ", Salary:" + bankAccount.getSalary()));
     }
 
     @Override
